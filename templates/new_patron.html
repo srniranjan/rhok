@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block Styles %}
+<style>
+    #task input{
+        margin-top:10px;
+        margin-bottom:10px;
+    }
+</style>
+{% endblock %}
+
+{% block Content %}
+    <h1>Enter new patron information</h1>
+    <form class="form-horizontal" style="margin-top:25px">
+        <div class="control-group">
+            <input type="text" id="name" placeholder="First name, last name" class="input-block-level">
+        </div>
+        <div class="control-group">
+            <input type="text" id="phone" placeholder="+919686662159" class="input-block-level">
+        </div>
+        <div class="control-group">
+            <textarea rows="4" placeholder="#34/7 17th Cross 13th Malleswaram Bangalore 34" class="input-block-level"></textarea>
+        </div>
+        <div id="task-adder" class="control-group well input-block-level">
+            <div id="tasks-list">
+                <div id="task">
+                    <span class="help-block">Enter details of a task the patron should be notified of.</span>
+                    <input type="text" id="task-name" placeholder="Play the piano" class="input-block-level">
+                    <input type="text" id="task-time" placeholder="9;11:30;18" class="input-block-level">
+                </div>
+            </div>
+            <input type="button" class="btn btn-primary" value="Add Task" onclick="addTask();">
+        </div>
+        <div class="control-group">
+            <input type="submit" class="btn btn-primary" value="Done!">
+        </div>
+    </form>
+{% endblock %}
+
+{% block Scripts %}
+<script type="text/javascript">
+    function addTask(){
+        var markup = buildNotifMarkup();
+        var task = $('#tasks-list #task').remove();
+        $('#tasks-list').append(markup);
+        addBackNewTaskMarkup(task);
+    }
+
+    function buildNotifMarkup(){
+        var name = $('#tasks-list #task #task-name').val();
+        var time = $('#tasks-list #task #task-time').val();
+        var message = name + ' successfully added for ' + time;
+        return '<div class="alert alert-success"><h4>' + name + '</h4>Successfully added for ' + time + '</div>';
+    }
+
+    function addBackNewTaskMarkup(task){
+        $('#tasks-list').append(task);
+        $('#tasks-list #task #task-name').val('');
+        $('#tasks-list #task #task-time').val('');
+    }
+</script>
+{% endblock %}

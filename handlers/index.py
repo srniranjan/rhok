@@ -1,5 +1,5 @@
 import webapp2
-import json
+import logging
 import os
 from pytz import timezone
 from datetime import datetime
@@ -7,6 +7,7 @@ from datetime import datetime
 from model.patron import Patron
 from model.reminder import Reminder
 from google.appengine.ext.webapp import template
+from twilio import send_sms
 
 class HomepageHandler(webapp2.RequestHandler):
     def get(self):
@@ -47,7 +48,10 @@ class SendRemindersHandler(webapp2.RequestHandler):
         reminders = Reminder.all()
         for reminder in reminders.run(limit=1000):
             if india_time.hour == int(reminder.time):
-                print 'Running', reminder.name
+                send_sms(reminder.patron.phone, reminder.name)
+                logging.info('+++++++++++++++')
+                logging.info('Running ' + reminder.name + ' at ' + reminder.patron.phone)
+                logging.info('+++++++++++++++')
 
 app = webapp2.WSGIApplication([('/', HomepageHandler),
                                ('/new_patron', NewPatronHandler),

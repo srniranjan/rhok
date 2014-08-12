@@ -19,7 +19,7 @@
             <input type="text" id="phone" placeholder="+919686662159" class="input-block-level">
         </div>
         <div class="control-group">
-            <textarea rows="4" placeholder="#34/7 17th Cross 13th Malleswaram Bangalore 34" class="input-block-level"></textarea>
+            <textarea rows="4" id="address" placeholder="#34/7 17th Cross 13th Malleswaram Bangalore 34" class="input-block-level"></textarea>
         </div>
         <div id="task-adder" class="control-group well input-block-level">
             <div id="tasks-list">
@@ -32,18 +32,44 @@
             <input type="button" class="btn btn-primary" value="Add Task" onclick="addTask();">
         </div>
         <div class="control-group">
-            <input type="submit" class="btn btn-primary" value="Done!">
+            <input type="button" class="btn btn-primary" value="Done!" onclick="submitForm();">
         </div>
+        <input type="hidden" id="saved-tasks">
     </form>
 {% endblock %}
 
 {% block Scripts %}
 <script type="text/javascript">
+    function read_tasks(){
+        console.log($('#saved-tasks').val());
+    }
+
+    function submitForm(){
+        var tasks = read_tasks();
+        $.post("/save_patron", {
+                name:$('#name').val(),
+                phone:$('#phone').val(),
+                address:$('#address').val(),
+                tasks:$('#saved-tasks').val()
+        }).done(function(data){
+            console.log(data);
+        }).error(function(){
+            alert('Sorry there was an error saving this patron!');
+        });
+    }
+
     function addTask(){
+        save_curr_task();
         var markup = buildNotifMarkup();
         var task = $('#tasks-list #task').remove();
         $('#tasks-list').append(markup);
         addBackNewTaskMarkup(task);
+    }
+
+    function save_curr_task(){
+        var old_val = $('#saved-tasks').val();
+        var new_val = $('#tasks-list #task #task-name').val() + '~~~~' + $('#tasks-list #task #task-time').val();
+        $('#saved-tasks').val(old_val + '####' + new_val)
     }
 
     function buildNotifMarkup(){

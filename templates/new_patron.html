@@ -26,7 +26,7 @@
                 <div id="task">
                     <span class="help-block">Enter details of a task the patron should be notified of.</span>
                     <input type="text" id="task-name" placeholder="Play the piano" class="input-block-level">
-                    <input type="text" id="task-time" placeholder="9;11:30;18" class="input-block-level">
+                    <input type="text" id="task-time" placeholder="9;11;18" class="input-block-level">
                 </div>
             </div>
             <input type="button" class="btn btn-primary" value="Add Task" onclick="addTask();">
@@ -52,7 +52,7 @@
                 address:$('#address').val(),
                 tasks:$('#saved-tasks').val()
         }).done(function(data){
-            console.log(data);
+            window.location.href = '/';
         }).error(function(){
             alert('Sorry there was an error saving this patron!');
         });

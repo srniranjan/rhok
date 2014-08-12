@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block Content %}
+    <table class="table table-striped" id="search_results">
+        <tr>
+            <th>Name</th>
+            <th>Phone number</th>
+            <th>Address</th>
+            <th>Tasks Info</th>
+            <th></th>
+        </tr>
+        {% for patron in patrons %}
+            <tr>
+                <td>{{patron.name}}</td>
+                <td>{{patron.phone}}</td>
+                <td>{{patron.address}}</td>
+                <td>{{patron.tasks}}</td>
+                <td><input type="button" value="Delete" class="btn btn-small" onclick="del_patron({{patron.patron_id}})"></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block Scripts %}
+<script type="text/javascript">
+    function del_patron(patron_id){
+        $.post("/del_patron", {
+                patron_id:patron_id
+        }).done(function(data){
+            window.location.href = '/';
+        }).error(function(){
+            alert('Sorry could not delete patron!');
+        });
+    }
+</script>
+{% endblock %}

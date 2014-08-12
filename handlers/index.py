@@ -1,6 +1,8 @@
 import webapp2
 import json
 import os
+from pytz import timezone
+from datetime import datetime
 
 from model.patron import Patron
 from model.reminder import Reminder
@@ -38,6 +40,16 @@ class SavePatronHandler(webapp2.RequestHandler):
         patron.put()
         self.add_tasks(tasks, patron)
 
+class SendRemindersHandler(webapp2.RequestHandler):
+    def get(self):
+        india_tz = timezone('Asia/Calcutta')
+        india_time = datetime.now(india_tz)
+        reminders = Reminder.all()
+        for reminder in reminders.run(limit=1000):
+            if india_time.hour == int(reminder.time):
+                print 'Running', reminder.name
+
 app = webapp2.WSGIApplication([('/', HomepageHandler),
                                ('/new_patron', NewPatronHandler),
-                               ('/save_patron',SavePatronHandler)])
+                               ('/save_patron',SavePatronHandler),
+                               ('/send_reminders',SendRemindersHandler)])

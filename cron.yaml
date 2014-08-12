@@ -1,0 +1,5 @@
+cron:
+- description: reminder job
+  url: /send_reminders
+  schedule: every 1 hours from 04:00 to 23:59
+  timezone: Asia/Calcutta
